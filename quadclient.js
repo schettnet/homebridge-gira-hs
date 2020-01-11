@@ -53,7 +53,7 @@ QuadClient.prototype.onMessage = function (data) {
   } else if (action === 81) { // date/time?
     // TODO?
   } else if (action === 91) { // send hashed password
-    const salt = args.shift()
+    // const salt = args.shift()
     // https://github.com/leoyn/gira-homeserver-api/blob/c4bac2ddb97127f4dca79845b0ce55c6928cca38/api.py#L131
     // def __generateHash(self, username, password, salt):
     //   salt = [ord(c) for c in salt]
@@ -84,7 +84,7 @@ QuadClient.prototype.onMessage = function (data) {
           this.project = xml.parse(body, { ignoreAttributes: false }).project
           this.project.rooms.room.forEach(room => {
             const roomFriendlyName = room['@_txt']
-            this.project.device_groups.device_group.find(device_group => device_group['@_id'] === room['@_device_group']).device.forEach(device => {
+            this.project.device_groups.device_group.find(deviceGroup => deviceGroup['@_id'] === room['@_device_group']).device.forEach(device => {
               const id = device['@_id']
               const deviceFriendlyName = device['@_text']
               const realDevice = this.project.devices.device.find(device => device['@_id'] === id)

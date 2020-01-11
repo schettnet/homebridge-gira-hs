@@ -1,6 +1,6 @@
 {
   "name": "homebridge-platform-gira-homeserver",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Gira HomeServer Platform plugin for HomeBridge",
   "keywords": [
     "gira-homeserver",
