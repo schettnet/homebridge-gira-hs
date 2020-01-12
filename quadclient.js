@@ -43,10 +43,16 @@ QuadClient.prototype.connect = function () {
 }
 
 QuadClient.prototype.onMessage = function (data) {
+  this.platform.log.debug('quadClient:onMessage(' + data + ')')
+
   const args = data.toString().split('|')
   const action = parseInt(args.shift())
 
-  if (action === 1 || action === 2) {
+  if (action === 1) {
+    const deviceId = args.shift()
+    const deviceValue = parseFloat(args.shift())
+    this.setDeviceValue(deviceId, deviceValue)
+  } else if (action === 2) {
     const deviceId = args.shift()
     const deviceValue = parseFloat(args.shift())
     this.setDeviceValue(deviceId, deviceValue)
@@ -111,12 +117,13 @@ QuadClient.prototype.addDevice = function (nodeName, friendlyName, connects) {
 }
 
 QuadClient.prototype.setDeviceValue = function (deviceId, deviceValue) {
+  this.platform.log.debug('quadClient:setValue(' + deviceId + ',' + deviceValue + ')')
   this.platform.onSetDeviceValue && this.platform.onSetDeviceValue(deviceId, deviceValue)
 }
 
 QuadClient.prototype.send = function (deviceId, deviceValue) {
   const message = ['1', deviceId, deviceValue].join('|')
-  console.log(message)
+  this.platform.log.debug('quadClient:send(' + message + ')')
   this.ws.send(message)
 }
 

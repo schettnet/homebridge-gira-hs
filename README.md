@@ -2,6 +2,8 @@
 
 Gira HomeServer Platform plugin for HomeBridge.
 
+**This plugin is currently ALPHA quality.**
+
 ## Configuration
 
 ```json
@@ -11,7 +13,7 @@ Gira HomeServer Platform plugin for HomeBridge.
       "platform": "GiraHomeServerPlatform",
       "name": "Gira HomeServer",
       "quadClient": {
-        "host": "192.168.0.99",
+        "host": "192.168.0.11",
         "port": 443,
         "username": "qcusername",
         "password": "qcpassword",
@@ -28,4 +30,5 @@ Gira HomeServer Platform plugin for HomeBridge.
 
 ## License
 
-This project is licensed under the terms of the MIT license. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the terms of the MIT license.
+See the [LICENSE](LICENSE) file for details.
