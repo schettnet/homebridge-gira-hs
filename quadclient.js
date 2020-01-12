@@ -44,7 +44,7 @@ QuadClient.prototype.connect = function () {
 }
 
 QuadClient.prototype.onMessage = function (data) {
-  this.platform.log.debug('quadClient:onMessage(' + data + ')')
+  this.log.debug('quadClient:onMessage(' + data + ')')
 
   const args = data.toString().split('|')
   const action = parseInt(args.shift())
