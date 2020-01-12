@@ -28,7 +28,7 @@ function GiraHomeServerPlatform (log, config, api) {
   this.api = api
 
   this.accessories = []
-  this.quadClient = new QuadClient(config.quadClient, {
+  this.quadClient = new QuadClient(this.log, this.config.quadClient, {
     onAddDevice: (nodeName, displayName, connects) => platform.addDevice(nodeName, displayName, connects),
     onSetDeviceValue: (deviceId, deviceValue) => platform.setDeviceValue(deviceId, deviceValue)
   })

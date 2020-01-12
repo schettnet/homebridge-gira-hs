@@ -4,7 +4,8 @@ const WebSocket = require('ws')
 const https = require('https')
 const xml = require('fast-xml-parser')
 
-function QuadClient (config, platform) {
+function QuadClient (log, config, platform) {
+  this.log = log
   this.config = config
   this.platform = platform
   this.query = 'xx'
@@ -117,13 +118,13 @@ QuadClient.prototype.addDevice = function (nodeName, friendlyName, connects) {
 }
 
 QuadClient.prototype.setDeviceValue = function (deviceId, deviceValue) {
-  this.platform.log.debug('quadClient:setValue(' + deviceId + ',' + deviceValue + ')')
+  this.log.debug('quadClient:setValue(' + deviceId + ',' + deviceValue + ')')
   this.platform.onSetDeviceValue && this.platform.onSetDeviceValue(deviceId, deviceValue)
 }
 
 QuadClient.prototype.send = function (deviceId, deviceValue) {
   const message = ['1', deviceId, deviceValue].join('|')
-  this.platform.log.debug('quadClient:send(' + message + ')')
+  this.log.debug('quadClient:send(' + message + ')')
   this.ws.send(message)
 }
 
