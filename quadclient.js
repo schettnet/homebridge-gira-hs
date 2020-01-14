@@ -49,16 +49,16 @@ QuadClient.prototype.onMessage = function (data) {
   const args = data.toString().split('|')
   const action = parseInt(args.shift())
 
-  if (action === 1) {
+  if (action === 1 || action === 2) {
     const deviceId = args.shift()
     const deviceValue = parseFloat(args.shift())
     this.setDeviceValue(deviceId, deviceValue)
-  } else if (action === 2) {
-    const deviceId = args.shift()
-    const deviceValue = parseFloat(args.shift())
-    this.setDeviceValue(deviceId, deviceValue)
-  } else if (action === 81) { // date/time?
-    // TODO?
+  } else if (action === 81) { // timestamp
+    if (typeof this.timeout === 'undefined') {
+      this.timeout = setInterval(function () {
+        this.ws.send('80||')
+      }.bind(this), 20000)
+    }
   } else if (action === 91) { // send hashed password
     // const salt = args.shift()
     // https://github.com/leoyn/gira-homeserver-api/blob/c4bac2ddb97127f4dca79845b0ce55c6928cca38/api.py#L131
@@ -123,7 +123,7 @@ QuadClient.prototype.setDeviceValue = function (deviceId, deviceValue) {
 }
 
 QuadClient.prototype.send = function (deviceId, deviceValue) {
-  const message = ['1', deviceId, deviceValue].join('|')
+  const message = ['1', deviceId, deviceValue, '0'].join('|')
   this.log.debug('quadClient:send(' + message + ')')
   this.ws.send(message)
 }

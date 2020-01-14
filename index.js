@@ -62,7 +62,7 @@ GiraHomeServerPlatform.prototype.configureAccessory = function (accessory) {
       accessory.getService(Service.Lightbulb) // , accessory.displayName)
         .getCharacteristic(Characteristic.On)
         .on('set', function (value, callback) {
-          platform.log(accessory.displayName, 'On -> ' + value)
+          platform.log(accessory.displayName, '[' + key + ']', 'On -> ' + value)
           platform.quadClient.send(key, value ? 1 : 0)
           callback()
         })
@@ -70,15 +70,15 @@ GiraHomeServerPlatform.prototype.configureAccessory = function (accessory) {
       accessory.getService(Service.Lightbulb) // , accessory.displayName)
         .getCharacteristic(Characteristic.Brightness)
         .on('set', function (value, callback) {
-          platform.log(accessory.displayName, 'Brightness -> ' + value)
-          platform.quadClient.send(key, value)
+          platform.log(accessory.displayName, '[' + key + ']', 'Brightness -> ' + value)
+          platform.quadClient.send(key, value + '.0')
           callback()
         })
     } else if (slot === 'switch') {
       accessory.getService(Service.Switch) // , accessory.displayName)
         .getCharacteristic(Characteristic.On)
         .on('set', function (value, callback) {
-          platform.log(accessory.displayName, 'On -> ' + value)
+          platform.log(accessory.displayName, '[' + key + ']', 'On -> ' + value)
           platform.quadClient.send(key, value ? 1 : 0)
           callback()
         })
@@ -103,6 +103,8 @@ GiraHomeServerPlatform.prototype.addAccessory = function (nodeName, displayName,
   accessory.getService(Service.AccessoryInformation)
     .setCharacteristic(Characteristic.Manufacturer, 'Gira')
     .setCharacteristic(Characteristic.Model, 'HomeServer')
+    // .setCharacteristic(Characteristic.SerialNumber, ...)
+    .setCharacteristic(Characteristic.FirmwareRevision, require('package.json').version)
 
   accessory.on('identify', function (paired, callback) {
     platform.log(accessory.displayName, 'Identify!!!')
@@ -186,36 +188,21 @@ GiraHomeServerPlatform.prototype.setDeviceValue = function (deviceId, deviceValu
   var accessory = this.accessories.find(accessory => deviceId in accessory.context.tags)
 
   if (accessory) {
-    /*
     var slot = accessory.context.tags[deviceId]
 
-    var service, characteristic, currentValue
-
     if (slot === 'dim_s') {
-      this.log.debug(slot)
-      service = accessory.getService(Service.Lightbulb, accessory.displayName)
-      characteristic = service.getCharacteristic(Characteristic.On)
-      console.log(typeof deviceValue + ' ' + deviceValue)
-      console.log(typeof characteristic.value + ' ' + characteristic.value)
-      if (characteristic.getValue() !== deviceValue) {
-        characteristic.updateValue(parseInt(deviceValue) === 1)
-      }
+      accessory.getService(Service.Lightbulb, accessory.displayName)
+        .getCharacteristic(Characteristic.On)
+        .updateValue(parseInt(deviceValue) === 1)
     } else if (slot === 'dim_val') {
-      this.log.debug(slot)
-      service = accessory.getService(Service.Lightbulb, accessory.displayName)
-      characteristic = service.getCharacteristic(Characteristic.Brightness)
-      console.log(typeof deviceValue + ' ' + deviceValue)
-      console.log(typeof characteristic.getValue() + ' ' + characteristic.getValue())
-      // accessory.getService(Service.Lightbulb, accessory.displayName)
-      //   .getCharacteristic(Characteristic.Brightness)
-      //   .updateValue(parseFloat(deviceValue))
+      accessory.getService(Service.Lightbulb, accessory.displayName)
+        .getCharacteristic(Characteristic.Brightness)
+        .updateValue(parseFloat(deviceValue))
     } else if (slot === 'switch') {
-      this.log.debug(slot)
-      // accessory.getService(Service.Switch, accessory.displayName)
-      //   .getCharacteristic(Characteristic.On)
-      //   .updateValue(parseInt(deviceValue) === 1)
+      accessory.getService(Service.Switch, accessory.displayName)
+        .getCharacteristic(Characteristic.On)
+        .updateValue(parseInt(deviceValue) === 1)
     }
-    */
   } else {
     this.log.error(deviceId + ' not found')
   }
