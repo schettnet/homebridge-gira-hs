@@ -104,7 +104,7 @@ GiraHomeServerPlatform.prototype.addAccessory = function (nodeName, displayName,
     .setCharacteristic(Characteristic.Manufacturer, 'Gira')
     .setCharacteristic(Characteristic.Model, 'HomeServer')
     // .setCharacteristic(Characteristic.SerialNumber, ...)
-    .setCharacteristic(Characteristic.FirmwareRevision, require('package.json').version)
+    .setCharacteristic(Characteristic.FirmwareRevision, require('./package.json').version)
 
   accessory.on('identify', function (paired, callback) {
     platform.log(accessory.displayName, 'Identify!!!')
