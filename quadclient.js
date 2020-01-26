@@ -123,7 +123,7 @@ QuadClient.prototype.setDeviceValue = function (deviceId, deviceValue) {
 }
 
 QuadClient.prototype.send = function (deviceId, deviceValue) {
-  const message = ['1', deviceId, deviceValue, '0'].join('|')
+  const message = ['1', deviceId, deviceValue].join('|')
   this.log.debug('quadClient:send(' + message + ')')
   this.ws.send(message)
 }

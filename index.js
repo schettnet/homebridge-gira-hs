@@ -55,14 +55,15 @@ GiraHomeServerPlatform.prototype.configureAccessory = function (accessory) {
     callback()
   })
 
-  for (var key in accessory.context.tags) {
+  for (const key in accessory.context.tags) {
     const slot = accessory.context.tags[key]
 
     if (slot === 'dim_s') {
       accessory.getService(Service.Lightbulb) // , accessory.displayName)
         .getCharacteristic(Characteristic.On)
         .on('set', function (value, callback) {
-          platform.log(accessory.displayName, '[' + key + ']', 'On -> ' + value)
+          platform.log.debug('configureAccessory/set:', accessory.displayName,
+            '[' + key + ']', 'On -> ' + value)
           platform.quadClient.send(key, value ? 1 : 0)
           callback()
         })
@@ -70,15 +71,17 @@ GiraHomeServerPlatform.prototype.configureAccessory = function (accessory) {
       accessory.getService(Service.Lightbulb) // , accessory.displayName)
         .getCharacteristic(Characteristic.Brightness)
         .on('set', function (value, callback) {
-          platform.log(accessory.displayName, '[' + key + ']', 'Brightness -> ' + value)
-          platform.quadClient.send(key, value + '.0')
+          platform.log.debug('configureAccessory/set:', accessory.displayName,
+            '[' + key + ']', 'Brightness -> ' + value)
+          platform.quadClient.send(key, value)
           callback()
         })
     } else if (slot === 'switch') {
       accessory.getService(Service.Switch) // , accessory.displayName)
         .getCharacteristic(Characteristic.On)
         .on('set', function (value, callback) {
-          platform.log(accessory.displayName, '[' + key + ']', 'On -> ' + value)
+          platform.log.debug('configureAccessory/set:', accessory.displayName,
+            '[' + key + ']', 'On -> ' + value)
           platform.quadClient.send(key, value ? 1 : 0)
           callback()
         })
@@ -89,17 +92,17 @@ GiraHomeServerPlatform.prototype.configureAccessory = function (accessory) {
 }
 
 GiraHomeServerPlatform.prototype.addAccessory = function (nodeName, displayName, context) {
-  this.log.debug('Add Accessory:' + context.tags)
+  this.log.debug('Add Accessory:' + JSON.stringify(context.tags))
 
   var platform = this
-  var uuid = UUIDGen.generate(nodeName)
 
+  const uuid = UUIDGen.generate(nodeName)
   if (this.accessories.find(accessory => accessory.UUID === uuid)) {
     this.log.debug('Already present')
     return
   }
 
-  var accessory = new Accessory(displayName, uuid)
+  const accessory = new Accessory(displayName, uuid)
   accessory.getService(Service.AccessoryInformation)
     .setCharacteristic(Characteristic.Manufacturer, 'Gira')
     .setCharacteristic(Characteristic.Model, 'HomeServer')
@@ -113,14 +116,15 @@ GiraHomeServerPlatform.prototype.addAccessory = function (nodeName, displayName,
 
   accessory.context = context
 
-  for (var key in accessory.context.tags) {
+  for (const key in accessory.context.tags) {
     const slot = accessory.context.tags[key]
 
     if (slot === 'dim_s') {
       accessory.addService(Service.Lightbulb, displayName)
         .getCharacteristic(Characteristic.On)
         .on('set', function (value, callback) {
-          platform.log(accessory.displayName, 'On -> ' + value)
+          platform.log.debug('addAccessory/set:', accessory.displayName,
+            '[' + key + ']', 'On -> ' + value)
           platform.quadClient.send(key, value ? 1 : 0)
           callback()
         })
@@ -128,21 +132,24 @@ GiraHomeServerPlatform.prototype.addAccessory = function (nodeName, displayName,
       accessory.addService(Service.Switch, displayName)
         .getCharacteristic(Characteristic.On)
         .on('set', function (value, callback) {
-          platform.log(accessory.displayName, 'On -> ' + value)
+          platform.log.debug('addAccessory/set:', accessory.displayName,
+            '[' + key + ']', 'On -> ' + value)
           platform.quadClient.send(key, value ? 1 : 0)
           callback()
         })
     }
   }
 
-  for (key in accessory.context.tags) {
+  for (const key in accessory.context.tags) {
     const slot = accessory.context.tags[key]
+    platform.log.debug('key:', key, 'slot:', slot)
 
     if (slot === 'dim_val') {
       accessory.getService(Service.Lightbulb, displayName)
         .getCharacteristic(Characteristic.Brightness)
         .on('set', function (value, callback) {
-          platform.log(accessory.displayName, 'Brightness -> ' + value)
+          platform.log.debug('addAccessory/set:', accessory.displayName,
+            '[' + key + ']', 'Brightness -> ' + value)
           platform.quadClient.send(key, value)
           callback()
         })
@@ -159,8 +166,8 @@ GiraHomeServerPlatform.prototype.addAccessory = function (nodeName, displayName,
 GiraHomeServerPlatform.prototype.updateAccessoriesReachability = function () {
   this.log.debug('Update Reachability')
 
-  for (var index in this.accessories) {
-    var accessory = this.accessories[index]
+  for (const index in this.accessories) {
+    const accessory = this.accessories[index]
     accessory.updateReachability(false)
   }
 }
@@ -185,10 +192,10 @@ GiraHomeServerPlatform.prototype.addDevice = function (nodeName, displayName, co
 GiraHomeServerPlatform.prototype.setDeviceValue = function (deviceId, deviceValue) {
   this.log.debug('Platform:setDeviceValue(' + deviceId + ',' + deviceValue + ')')
 
-  var accessory = this.accessories.find(accessory => deviceId in accessory.context.tags)
+  const accessory = this.accessories.find(accessory => deviceId in accessory.context.tags)
 
   if (accessory) {
-    var slot = accessory.context.tags[deviceId]
+    const slot = accessory.context.tags[deviceId]
 
     if (slot === 'dim_s') {
       accessory.getService(Service.Lightbulb, accessory.displayName)
