@@ -91,7 +91,12 @@ QuadClient.prototype.onMessage = function (data) {
           this.project = xml.parse(body, { ignoreAttributes: false }).project
           this.project.rooms.room.forEach(room => {
             const roomFriendlyName = room['@_txt']
-            this.project.device_groups.device_group.find(deviceGroup => deviceGroup['@_id'] === room['@_device_group']).device.forEach(device => {
+            const deviceGroup = this.project.device_groups.device_group.find(deviceGroup => deviceGroup['@_id'] === room['@_device_group'])
+            if (!Array.isArray(deviceGroup.device)) {
+              deviceGroup.device = [deviceGroup.device]
+            }
+
+            deviceGroup.device.forEach(device => {
               const id = device['@_id']
               const deviceFriendlyName = device['@_text']
               const realDevice = this.project.devices.device.find(device => device['@_id'] === id)

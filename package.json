@@ -1,6 +1,6 @@
 {
-  "name": "homebridge-platform-gira-homeserver",
-  "version": "0.0.8",
+  "name": "homebridge-gira-hs",
+  "version": "0.1.0",
   "description": "Gira HomeServer Platform plugin for HomeBridge",
   "keywords": [
     "gira-homeserver",
@@ -12,8 +12,8 @@
   },
   "license": "MIT",
   "author": {
-    "name": "Nick Osborn",
-    "url": "https://github.com/nosborn"
+    "name": "Nico Schett",
+    "url": "https://github.com/schettn"
   },
   "main": "index.js",
   "repository": {
@@ -34,9 +34,9 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "homebridge": "^0.4.50"
+    "homebridge": "^1.3.4"
   },
   "engines": {
-    "homebridge": "^0.4.50"
+    "homebridge": "^1.3.4"
   }
 }
