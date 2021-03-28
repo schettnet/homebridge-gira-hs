@@ -161,6 +161,8 @@ GiraHomeServerPlatform.prototype.addAccessory = function (nodeName, displayName,
     'homebridge-platform-gira-homeserver',
     'GiraHomeServerPlatform',
     [accessory])
+
+  this.log.debug('register acc', [accessory])
 }
 
 GiraHomeServerPlatform.prototype.updateAccessoriesReachability = function () {
@@ -193,6 +195,7 @@ GiraHomeServerPlatform.prototype.setDeviceValue = function (deviceId, deviceValu
   this.log.debug('Platform:setDeviceValue(' + deviceId + ',' + deviceValue + ')')
 
   const accessory = this.accessories.find(accessory => deviceId in accessory.context.tags)
+  // console.log(this.accessories[0].context.tags)
 
   if (accessory) {
     const slot = accessory.context.tags[deviceId]
@@ -211,6 +214,7 @@ GiraHomeServerPlatform.prototype.setDeviceValue = function (deviceId, deviceValu
         .updateValue(parseInt(deviceValue) === 1)
     }
   } else {
-    this.log.error(deviceId + ' not found')
+    // this.log.error(deviceId + ' not found')
+    // process.exit(1)
   }
 }

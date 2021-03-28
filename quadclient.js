@@ -73,7 +73,9 @@ QuadClient.prototype.onMessage = function (data) {
     //   return hash
     this.ws.send('92|' + this.config.password + '|') // FIXME
   } else if (action === 93) { // login succeeded
+    this.log.debug('login succeeded', action)
     this.query = args.shift()
+    this.log.debug('login args', this.query)
     https.get(
       {
         host: this.config.host,
@@ -92,6 +94,8 @@ QuadClient.prototype.onMessage = function (data) {
           this.project.rooms.room.forEach(room => {
             const roomFriendlyName = room['@_txt']
             const deviceGroup = this.project.device_groups.device_group.find(deviceGroup => deviceGroup['@_id'] === room['@_device_group'])
+            this.log.debug(deviceGroup)
+
             if (!Array.isArray(deviceGroup.device)) {
               deviceGroup.device = [deviceGroup.device]
             }
