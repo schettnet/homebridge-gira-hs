@@ -76,7 +76,7 @@ GiraHomeServerPlatform.prototype.configureAccessory = function (accessory) {
           platform.quadClient.send(key, value)
           callback()
         })
-    } else if (slot === 'switch' || slot === 'switch_rm') {
+    } else if (slot === 'switch') {
       accessory.getService(Service.Switch) // , accessory.displayName)
         .getCharacteristic(Characteristic.On)
         .on('set', function (value, callback) {
@@ -208,7 +208,7 @@ GiraHomeServerPlatform.prototype.setDeviceValue = function (deviceId, deviceValu
       accessory.getService(Service.Lightbulb, accessory.displayName)
         .getCharacteristic(Characteristic.Brightness)
         .updateValue(parseFloat(deviceValue))
-    } else if (slot === 'switch' || slot === 'switch_rm') {
+    } else if (slot === 'switch') {
       accessory.getService(Service.Switch, accessory.displayName)
         .getCharacteristic(Characteristic.On)
         .updateValue(parseInt(deviceValue) === 1)
