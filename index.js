@@ -85,6 +85,15 @@ GiraHomeServerPlatform.prototype.configureAccessory = function (accessory) {
           platform.quadClient.send(key, value ? 1 : 0)
           callback()
         })
+    } else if (slot === 'slot_position') {
+      accessory.getService(Service.WindowCovering) // , accessory.displayName)
+        .getCharacteristic(Characteristic.CurrentPosition)
+        .on('set', function (value, callback) {
+          platform.log.debug('configureAccessory/set:', accessory.displayName,
+            '[' + key + ']', 'On -> ' + value)
+          platform.quadClient.send(key, value)
+          callback()
+        })
     }
   }
 
@@ -140,7 +149,7 @@ GiraHomeServerPlatform.prototype.addAccessory = function (nodeName, displayName,
         })
     } else if (slot === 'slot_position') {
       accessory.addService(Service.WindowCovering, displayName)
-        .getCharacteristic(Characteristic.PositionState)
+        .getCharacteristic(Characteristic.CurrentPosition)
         .on('set', function (value, callback) {
           platform.log.debug('addAccessory/set:', accessory.displayName,
             '[' + key + ']', 'PositionState -> ' + value)
