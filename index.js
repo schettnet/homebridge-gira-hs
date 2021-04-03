@@ -221,6 +221,10 @@ GiraHomeServerPlatform.prototype.setDeviceValue = function (deviceId, deviceValu
       accessory.getService(Service.Switch, accessory.displayName)
         .getCharacteristic(Characteristic.On)
         .updateValue(parseInt(deviceValue) === 1)
+    } else if (slot === 'slot_position') {
+      accessory.getService(Service.WindowCovering, accessory.displayName)
+        .getCharacteristic(Characteristic.TargetPosition)
+        .updateValue(parseFloat(deviceValue))
     }
   } else {
     // this.log.error(deviceId + ' not found')
